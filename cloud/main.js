@@ -3,6 +3,10 @@ Parse.Cloud.define('hello', function(req, res) {
   res.success('hello');
 });
 
+Parse.Cloud.define('conference', function(req, res) {
+  res.success('conference cloud code testing');
+});
+
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 // afterSave methods are used to create an AppUser if non-existent.
 // beforeSave methods are used to avoid duplicates
