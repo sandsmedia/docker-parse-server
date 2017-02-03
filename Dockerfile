@@ -17,6 +17,10 @@ ADD jsconfig.json ${PARSE_HOME}/
 ENV CLOUD_CODE_HOME ${PARSE_HOME}/cloud
 ADD cloud/*.js $CLOUD_CODE_HOME/
 
+# Add certificates folder and contents
+ENV CERTS_HOME ${PARSE_HOME}/certs
+ADD certs $CERTS_HOME/
+
 WORKDIR $PARSE_HOME
 RUN npm install
 
