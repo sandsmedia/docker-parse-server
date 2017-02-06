@@ -74,56 +74,56 @@ Parse.Cloud.beforeSave("AdvertisementCount", function(request, response) {
 });
 
 var appUser = Parse.Object.extend("AppUser");
-Parse.Cloud.beforeSave("AppUser", function(request, response) {
-  if (!request.object.isNew()) {
-    // Let existing object updates go through
-    response.success();
-  }
-  var query = new Parse.Query(appUser);
-  // Add query filters to check for uniqueness
-  query.equalTo("uniqueDeviceIdentifier", request.object.get("uniqueDeviceIdentifier"));
-  query.first().then(function(existingObject) {
-    if (existingObject) {
-      // Update existing object
-      if (!existingObject.get("stateCounter")) {
-        // counter is not yet defined
-        if (existingObject.get("active") == true) {
-          // Old object state is active
-          existingObject.set("stateCounter", 1);
-        } else {
-          existingObject.set("stateCounter", 0);
-        }
-      }
-
-      var increment = -1;
-      if (request.object.get("active") == true) {
-        // New object state is active
-        increment = 1;
-      }
-      existingObject.increment("stateCounter", increment);
-
-      var newState = false;
-      if (existingObject.get("stateCounter") > 0) {
-        newState = true;
-      }
-      existingObject.set("active", newState);
-      return existingObject.save();
-    } else {
-      // Pass a flag that this is not an existing object
-      return Parse.Promise.as(false);
-    }
-  }).then(function(existingObject) {
-    if (existingObject) {
-      // Existing object, stop initial save
-      response.error("Existing object");
-    } else {
-      // New object, let the save go through
-      response.success();
-    }
-  }, function(error) {
-    response.error("Error in AppUser beforeSave: " + error.code + ": " + error.message);
-  });
-});
+//    Parse.Cloud.beforeSave("AppUser", function(request, response) {
+//        if (!request.object.isNew()) {
+//            // Let existing object updates go through
+//            response.success();
+//        }
+//        var query = new Parse.Query(appUser);
+//        // Add query filters to check for uniqueness
+//        query.equalTo("uniqueDeviceIdentifier", request.object.get("uniqueDeviceIdentifier"));
+//        query.first().then(function(existingObject) {
+//            if (existingObject) {
+//                // Update existing object
+//                if (!existingObject.get("stateCounter")) {
+//                    // counter is not yet defined
+//                    if (existingObject.get("active") == true) {
+//                        // Old object state is active
+//                        existingObject.set("stateCounter", 1);
+//                    } else {
+//                        existingObject.set("stateCounter", 0);
+//                    }
+//                }
+//
+//                var increment = -1;
+//                if (request.object.get("active") == true) {
+//                    // New object state is active
+//                    increment = 1;
+//                }
+//                existingObject.increment("stateCounter", increment);
+//
+//                var newState = false;
+//                if (existingObject.get("stateCounter") > 0) {
+//                    newState = true;
+//                }
+//                existingObject.set("active", newState);
+//                return existingObject.save();
+//            } else {
+//                // Pass a flag that this is not an existing object
+//                return Parse.Promise.as(false);
+//            }
+//        }).then(function(existingObject) {
+//            if (existingObject) {
+//                // Existing object, stop initial save
+//                response.error("Existing object");
+//            } else {
+//                // New object, let the save go through
+//                response.success();
+//            }
+//        }, function(error) {
+//            response.error("Error in AppUser beforeSave: " + error.code + ": " + error.message);
+//        });
+//    });
 
 Parse.Cloud.afterSave("AdvertisementCount", function(request) {
   if (request.object.get("uniqueDeviceIdentifier")) {
