@@ -41,36 +41,7 @@ Parse.Cloud.beforeSave("SessionFavourite", function(request, response) {
 
 var advertisementCount = Parse.Object.extend("AdvertisementCount");
 Parse.Cloud.beforeSave("AdvertisementCount", function(request, response) {
-  if (!request.object.isNew()) {
-    // Let existing object updates go through
     response.success();
-  }
-  var query = new Parse.Query(advertisementCount);
-  // Add query filters to check for uniqueness
-  query.equalTo("uniqueDeviceIdentifier", request.object.get("uniqueDeviceIdentifier"));
-  query.equalTo("url", request.object.get("url"));
-  query.equalTo("class", request.object.get("class"));
-  query.equalTo("event", request.object.get("event"));
-  query.first().then(function(existingObject) {
-    if (existingObject) {
-      // Update existing object
-      existingObject.increment("clicked");
-      return existingObject.save();
-    } else {
-      // Pass a flag that this is not an existing object
-      return Parse.Promise.as(false);
-    }
-  }).then(function(existingObject) {
-    if (existingObject) {
-      // Existing object, stop initial save
-      response.error("Existing object");
-    } else {
-      // New object, let the save go through
-      response.success();
-    }
-  }, function(error) {
-    response.error("Error in AdvertisementCount beforeSave: " + error.code + ": " + error.message);
-  });
 });
 
 var appUser = Parse.Object.extend("AppUser");
