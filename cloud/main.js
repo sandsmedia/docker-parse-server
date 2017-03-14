@@ -7,7 +7,7 @@ Parse.Cloud.define('conference', function(req, res) {
   res.success('conference cloud code testing');
 });
 
-Parse.Cloud.define('sendPush', function(req, res) {
+Parse.Cloud.define('push', function(req, res) {
   var params = req.params;
 
   //var queryIOS = new Parse.Query(Parse.Installation);
@@ -27,7 +27,7 @@ Parse.Cloud.define('sendPush', function(req, res) {
   var expirationTime = new Date(params.expirationTimeInMilliseconds);
   var pushContent = params.pushContent;
 
-  res.success('params: ', params);
+  res.success('params: ', req);
 
   //Parse.Push.send({
   //  where: queryDevices, // Set our Installation query
