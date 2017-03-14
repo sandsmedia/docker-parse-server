@@ -23,8 +23,7 @@ Parse.Cloud.define('push', function(req, res) {
   var queryDevices = new Parse.Query(Parse.Installation);
   queryDevices.containedIn('deviceType', params.deviceTypes);
   queryDevices.containedIn('channels', params.channels);
-  queryDevices.equalTo('deviceToken', '7b5eeaca9cf3f80c1a4c128d2ef16f179f4dfb5e89c7cdda7224f6001a61e8cf');
-
+  //queryDevices.equalTo('deviceToken', '7b5eeaca9cf3f80c1a4c128d2ef16f179f4dfb5e89c7cdda7224f6001a61e8cf');
 
   var expirationTime = params.expirationTimeInMilliseconds;
   var pushContent = params.pushContent;
