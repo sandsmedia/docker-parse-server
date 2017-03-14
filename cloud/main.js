@@ -42,6 +42,8 @@ Parse.Cloud.define('push', function(req, res) {
   console.log('pushObject: ', pushObject);
 
   Parse.Push.send(pushObject, {
+        useMasterKey: true
+  }, {
     success: function() {
       // Push was successful
       res.success('Push was successful');
