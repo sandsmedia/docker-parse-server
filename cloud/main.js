@@ -8,6 +8,7 @@ Parse.Cloud.define('conference', function(req, res) {
 });
 
 Parse.Cloud.define('push', function(req, res) {
+  Parse.Cloud.useMasterKey();
   var params = req.params;
   console.log('params: ', params);
   //var queryIOS = new Parse.Query(Parse.Installation);
@@ -32,8 +33,7 @@ Parse.Cloud.define('push', function(req, res) {
     where: queryDevices, // Set our Installation query
     data: {
       alert: pushContent
-    },
-    useMasterKey: true
+    }
   }
   if (expirationTime > 0) {
     pushObject.expiration_time = new Date(expirationTime);
