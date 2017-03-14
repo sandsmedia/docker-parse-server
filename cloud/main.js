@@ -32,7 +32,8 @@ Parse.Cloud.define('push', function(req, res) {
     where: queryDevices, // Set our Installation query
     data: {
       alert: pushContent
-    }
+    },
+    useMasterKey: true
   }
   if (expirationTime > 0) {
     pushObject.expiration_time = new Date(expirationTime);
