@@ -9,7 +9,7 @@ Parse.Cloud.define('conference', function(req, res) {
 
 Parse.Cloud.define('push', function(req, res) {
   var params = req.params;
-
+  console.log('params: ', params);
   //var queryIOS = new Parse.Query(Parse.Installation);
   //queryIOS.equalTo('deviceType', 'ios');
   //
@@ -22,29 +22,34 @@ Parse.Cloud.define('push', function(req, res) {
   var queryDevices = new Parse.Query(Parse.Installation);
   queryDevices.containedIn('deviceType', params.deviceTypes);
   queryDevices.containedIn('channels', params.channels);
+  queryDevices.equalTo('deviceToken', '7b5eeaca9cf3f80c1a4c128d2ef16f179f4dfb5e89c7cdda7224f6001a61e8cf');
 
 
-  var expirationTime = new Date(params.expirationTimeInMilliseconds);
+  var expirationTime = params.expirationTimeInMilliseconds;
   var pushContent = params.pushContent;
 
-  res.success('params: ', req);
+  var pushObject = {
+    where: queryDevices, // Set our Installation query
+    data: {
+      alert: pushContent
+    }
+  }
+  if (expirationTime > 0) {
+    pushObject.expiration_time = new Date(expirationTime);
+  }
 
-  //Parse.Push.send({
-  //  where: queryDevices, // Set our Installation query
-  //  expiration_time: expirationTime,
-  //  data: {
-  //    alert: pushContent
-  //  }
-  //}, {
-  //  success: function() {
-  //    // Push was successful
-  //    res.success('Push was successful');
-  //  },
-  //  error: function(error) {
-  //    // Handle error
-  //    res.error(error);
-  //  }
-  //});
+  console.log('pushObject: ', pushObject);
+
+  Parse.Push.send(pushObject, {
+    success: function() {
+      // Push was successful
+      res.success('Push was successful');
+    },
+    error: function(error) {
+      // Handle error
+      res.error(error);
+    }
+  });
 });
 
 // Use Parse.Cloud.define to define as many cloud functions as you want.
