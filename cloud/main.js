@@ -7,6 +7,46 @@ Parse.Cloud.define('conference', function(req, res) {
   res.success('conference cloud code testing');
 });
 
+Parse.Cloud.define('sendPush', function(req, res) {
+  var params = req.params;
+
+  //var queryIOS = new Parse.Query(Parse.Installation);
+  //queryIOS.equalTo('deviceType', 'ios');
+  //
+  //var queryAndroid = new Parse.Query(Parse.Installation);
+  //queryAndroid.equalTo('deviceType', 'android');
+  //
+  //var queryBoth = new Parse.Query(Parse.Installation);
+  //queryBoth.containedIn('deviceType', ['ios', 'android']);
+
+  var queryDevices = new Parse.Query(Parse.Installation);
+  queryDevices.containedIn('deviceType', params.deviceTypes);
+  queryDevices.containedIn('channels', params.channels);
+
+
+  var expirationTime = new Date(params.expirationTimeInMilliseconds);
+  var pushContent = params.pushContent;
+
+  res.success('params: ', params);
+
+  //Parse.Push.send({
+  //  where: queryDevices, // Set our Installation query
+  //  expiration_time: expirationTime,
+  //  data: {
+  //    alert: pushContent
+  //  }
+  //}, {
+  //  success: function() {
+  //    // Push was successful
+  //    res.success('Push was successful');
+  //  },
+  //  error: function(error) {
+  //    // Handle error
+  //    res.error(error);
+  //  }
+  //});
+});
+
 // Use Parse.Cloud.define to define as many cloud functions as you want.
 // afterSave methods are used to create an AppUser if non-existent.
 // beforeSave methods are used to avoid duplicates
