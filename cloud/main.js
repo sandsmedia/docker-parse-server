@@ -10,24 +10,12 @@ Parse.Cloud.define('conference', function(req, res) {
 Parse.Cloud.define('push', function(req, res) {
   Parse.Cloud.useMasterKey();
   var params = req.params;
-  console.log('params: ', params);
-  //var queryIOS = new Parse.Query(Parse.Installation);
-  //queryIOS.equalTo('deviceType', 'ios');
-  //
-  //var queryAndroid = new Parse.Query(Parse.Installation);
-  //queryAndroid.equalTo('deviceType', 'android');
-  //
-  //var queryBoth = new Parse.Query(Parse.Installation);
-  //queryBoth.containedIn('deviceType', ['ios', 'android']);
-
   var queryDevices = new Parse.Query(Parse.Installation);
   queryDevices.containedIn('deviceType', params.deviceTypes);
   queryDevices.containedIn('channels', params.channels);
   //queryDevices.equalTo('deviceToken', '7b5eeaca9cf3f80c1a4c128d2ef16f179f4dfb5e89c7cdda7224f6001a61e8cf');
-
   var expirationTime = params.expirationTimeInMilliseconds;
   var pushContent = params.pushContent;
-
   var pushObject = {
     where: queryDevices, // Set our Installation query
     data: {
@@ -37,8 +25,6 @@ Parse.Cloud.define('push', function(req, res) {
   if (expirationTime > 0) {
     pushObject.expiration_time = new Date(expirationTime);
   }
-
-  console.log('pushObject: ', pushObject);
 
   Parse.Push.send(pushObject, {
         useMasterKey: true
